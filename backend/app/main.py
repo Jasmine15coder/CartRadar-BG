@@ -256,6 +256,7 @@ async def resolve_link(body: ResolveRequest, request: Request):
     Auto-detects which platform the URL belongs to.
     """
     text = body.url.strip()
+    url = first_url(text) or text
     platform_name, product_id = extract_product_id(text)
 
     if not platform_name:
@@ -283,15 +284,10 @@ async def resolve_link(body: ResolveRequest, request: Request):
             # Zepto uses Playwright to organically fetch metadata & handle WAF
             lat = body.lat if body.lat is not None else 28.6139
             lng = body.lng if body.lng is not None else 77.2090
-            try:
-                res = await client.fetch_availability_playwright(lat, lng, product_id)
-                product = res.get("product")
-                if not product and res.get("error_reason"):
-                    # If we hit a WAF/Playwright error, return a fallback so the UI doesn't 500
-                    product = ProductResult(status="error", name="Zepto Product", image_url="")
-            except Exception as e:
-                log.error("Zepto metadata fetch via Playwright failed for %s: %s", url, e)
-                product = ProductResult(status="error", name="Zepto Product", image_url="")
+            res = await client.fetch_availability_playwright(lat, lng, product_id)
+            product = res.get("product")
+            if not product and res.get("error_reason"):
+                raise PlatformError(f"Metadata fetch failed: {res['error_reason']}")
         elif platform_name == "flipkart_minutes":
             # Delegate metadata extraction to the robust normal Flipkart client (uses ld+json API)
             # Flipkart Minutes and standard Flipkart share the same catalog metadata

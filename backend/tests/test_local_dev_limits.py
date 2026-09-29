@@ -6,6 +6,7 @@ from starlette.requests import Request
 
 from app import main
 from app.links import extract_product_id
+from app.platforms.base import PlatformError
 from app.platforms.blinkit import BlinkitClient, _parse_snippets
 
 
@@ -31,6 +32,11 @@ class _FakeClient:
 
     async def aclose(self) -> None:
         return None
+
+
+class _ResolveFailClient(_FakeClient):
+    async def fetch_availability_playwright(self, lat: float, lng: float, product_id: str) -> dict:
+        raise PlatformError("Zepto WAF challenge was not cleared")
 
 
 class _FakeCache:
@@ -108,6 +114,21 @@ def test_localhost_search_skips_search_limits(monkeypatch) -> None:
     assert response.status_code == 200
     assert "You've reached your search limit" not in response.text
     assert '"type": "done"' in response.text
+
+
+def test_resolve_returns_platform_error_instead_of_placeholder(monkeypatch) -> None:
+    monkeypatch.setattr(main, "_create_clients", lambda: {"zepto": _ResolveFailClient()})
+
+    with TestClient(main.app, base_url="http://localhost:8400") as client:
+        response = client.post(
+            "/api/resolve",
+            json={
+                "url": "https://www.zepto.com/pn/gold-winner-refined-sunflower-oil-pouch/pvid/93a89783-ffa6-4983-9a85-82e701b2ff89"
+            },
+        )
+
+    assert response.status_code == 502
+    assert "WAF challenge" in response.json()["detail"]
 
 
 def test_extract_swiggy_canonical_slug_link() -> None:

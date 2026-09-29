@@ -169,7 +169,9 @@ class ZeptoPlaywrightSession:
             serviceability_cookie = next((c for c in cookies if c["name"] == "serviceability"), None)
             
             if not serviceability_cookie:
-                raise ZeptoWafBlockedError("Zepto did not set a serviceability cookie.")
+                raise ZeptoWafBlockedError(
+                    "Zepto's WAF challenge did not complete (no serviceability cookie)."
+                )
                 
             data = json.loads(unquote(serviceability_cookie["value"]))
             primary = data.get("primaryStore") or {}
@@ -198,6 +200,8 @@ class ZeptoPlaywrightSession:
                 "eta_minutes": primary.get("etaInMinutes"),
                 "all_store_ids": list(set(all_stores))
             }
+        except ZeptoWafBlockedError:
+            raise
         except Exception as e:
             if "TimeoutError" in str(type(e)) or "Target closed" in str(e):
                 raise ZeptoWafBlockedError("Playwright timed out or blocked by WAF during probe") from e
@@ -317,8 +321,8 @@ class ZeptoClient(PlatformClient):
 
     async def fetch_availability_playwright(self, lat: float, lng: float, pvid: str) -> dict:
         """Legacy helper for single-location metadata fetches (e.g. resolve_link)."""
-        async with ZeptoPlaywrightSession() as session:
-            try:
+        try:
+            async with ZeptoPlaywrightSession() as session:
                 res = await session.probe_location(lat, lng)
                 if not res.get("serviceable") or not res.get("store_id"):
                     return {
@@ -360,13 +364,10 @@ class ZeptoClient(PlatformClient):
                     "product": product_result,
                     "error_reason": None
                 }
-            except ZeptoWafBlockedError as e:
-                return {
-                    "serviceable": False,
-                    "store_id": None,
-                    "product": None,
-                    "error_reason": "ACCESS_BLOCKED_OR_CHALLENGED"
-                }
+        except ZeptoError:
+            raise
+        except Exception as e:
+            raise ZeptoNetworkError(f"Playwright product fetch failed: {e}") from e
 
     async def resolve_share_link(self, url: str) -> str | None:
         return None
