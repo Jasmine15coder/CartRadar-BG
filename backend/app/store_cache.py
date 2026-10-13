@@ -138,6 +138,30 @@ class StoreCache:
         rows = self._db.execute(query, [platform] + list(valid_store_ids)).fetchall()
         return [Store(*r) for r in rows]
 
+    def stores_in_radius(self, lat: float, lng: float, radius_km: float, platform: str = "zepto") -> list[Store]:
+        """Return stores directly from the store cache within the requested radius."""
+        dlat = radius_km / KM_PER_DEG_LAT
+        dlng = radius_km / (KM_PER_DEG_LAT * max(0.1, math.cos(math.radians(lat))))
+        rows = self._db.execute(
+            "SELECT id, name, city, lat, lng, platform FROM stores "
+            "WHERE platform = ? AND lat BETWEEN ? AND ? AND lng BETWEEN ? AND ?",
+            (platform, lat - dlat, lat + dlat, lng - dlng, lng + dlng),
+        ).fetchall()
+        return [
+            Store(*row)
+            for row in rows
+            if haversine_km(lat, lng, row[3], row[4]) <= radius_km
+        ]
+
+    def stores_for_city(self, city: str, platform: str = "zepto") -> list[Store]:
+        """Return every cached store for a city without applying a distance filter."""
+        rows = self._db.execute(
+            "SELECT id, name, city, lat, lng, platform FROM stores "
+            "WHERE platform = ? AND city = ? ORDER BY name, id",
+            (platform, city),
+        ).fetchall()
+        return [Store(*row) for row in rows]
+
     def has_fresh_probe_near(self, lat: float, lng: float, within_km: float, platform: str = "zepto") -> bool:
         cutoff_ok = datetime.now(timezone.utc) - timedelta(days=SERVICEABLE_PROBE_TTL_DAYS)
         cutoff_empty = datetime.now(timezone.utc) - timedelta(days=UNSERVICEABLE_PROBE_TTL_DAYS)

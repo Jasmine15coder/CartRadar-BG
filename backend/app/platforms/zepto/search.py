@@ -1,10 +1,17 @@
 import asyncio
 import logging
+import os
 from typing import AsyncIterator
 
-from .client import ZeptoClient, ZeptoPlaywrightSession, ZeptoWafBlockedError, ZeptoNetworkError
+from .client import (
+    ZeptoClient,
+    ZeptoPlaywrightSession,
+    ZeptoWafBlockedError,
+    ZeptoNetworkError,
+    zepto_test_price,
+)
 from ..base import PlatformError
-from ...grid import hex_grid
+from ...grid import haversine_km, hex_grid
 from ...store_cache import StoreCache
 from ...config import GRID_SPACING_KM, PROBE_COVERAGE_KM
 
@@ -23,6 +30,59 @@ async def run_zepto_search(
     
     counts = {"stores": 0, "in_stock": 0, "out_of_stock": 0, "not_carried": 0, "error": 0, "not_serviceable": 0}
     checked_stores = set()
+
+    if os.environ.get("ZEPTO_TEST_MODE", "").strip().lower() == "true":
+        city_stores = cache.stores_for_city("Bengaluru", "zepto")
+        is_bengaluru_location = bool(city_stores) and (
+            min(store.lat for store in city_stores)
+            <= lat
+            <= max(store.lat for store in city_stores)
+            and min(store.lng for store in city_stores)
+            <= lng
+            <= max(store.lng for store in city_stores)
+        )
+        cached_stores = sorted(
+            city_stores
+            if is_bengaluru_location
+            else cache.stores_in_radius(lat, lng, radius_km, "zepto"),
+            key=lambda store: haversine_km(lat, lng, store.lat, store.lng),
+        )
+        home_stores = sorted(
+            cache.stores_in_radius(lat, lng, radius_km, "zepto"),
+            key=lambda store: haversine_km(lat, lng, store.lat, store.lng),
+        )
+        counts["stores"] = len(cached_stores)
+        counts["in_stock"] = len(cached_stores)
+
+        yield {
+            "type": "home_result",
+            "serviceable": bool(home_stores),
+            "city": home_stores[0].city if home_stores else None,
+            "store_name": home_stores[0].name if home_stores else None,
+            "eta_minutes": None,
+            "product": {"status": "in_stock"} if home_stores else None,
+        }
+        for store in cached_stores:
+            yield {
+                "type": "store_result",
+                "store": {
+                    "id": store.id,
+                    "name": store.name,
+                    "city": store.city,
+                    "lat": store.lat,
+                    "lng": store.lng,
+                    "platform": "zepto",
+                },
+                "distance_km": haversine_km(lat, lng, store.lat, store.lng),
+                "status": "in_stock",
+                "price": zepto_test_price(store.lat, store.lng, store.name),
+                "mrp": 129.0,
+                "verified": False,
+            }
+        yield {"type": "discovery_start", "points_to_probe": 0, "cached_stores": len(cached_stores)}
+        yield {"type": "checking", "total_stores": len(cached_stores)}
+        yield {"type": "done", "summary": dict(counts)}
+        return
     
     async def emit(event: dict) -> None:
         pass # Will be overridden by the wrapper or we can just yield directly
@@ -50,7 +110,6 @@ async def run_zepto_search(
                             counts[status] = counts.get(status, 0) + 1
                             counts["stores"] += 1
                             
-                            from ...grid import haversine_km
                             dist = haversine_km(lat, lng, store_obj.lat, store_obj.lng)
                             
                             is_verified_home = store_obj.id == home_res.get("store_id")
@@ -99,7 +158,6 @@ async def run_zepto_search(
                     status = prod.status
                     counts[status] = counts.get(status, 0) + 1
                     
-                    from ...grid import haversine_km
                     dist = haversine_km(lat, lng, c_store.lat, c_store.lng)
                     
                     yield {
@@ -172,7 +230,6 @@ async def run_zepto_search(
                                 status = prod.status
                                 counts[status] = counts.get(status, 0) + 1
                                 
-                                from ...grid import haversine_km
                                 dist = haversine_km(lat, lng, new_store.lat, new_store.lng)
                                 
                                 yield {
