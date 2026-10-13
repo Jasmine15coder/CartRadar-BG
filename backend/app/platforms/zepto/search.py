@@ -1,16 +1,8 @@
 import asyncio
 import logging
-import os
 from typing import AsyncIterator
 
-from .client import (
-    ZeptoClient,
-    ZeptoPlaywrightSession,
-    ZeptoWafBlockedError,
-    ZeptoNetworkError,
-    zepto_test_price,
-)
-from ..base import PlatformError
+from .client import ZeptoClient, ZeptoPlaywrightSession, ZeptoWafBlockedError
 from ...grid import haversine_km, hex_grid
 from ...store_cache import StoreCache
 from ...config import GRID_SPACING_KM, PROBE_COVERAGE_KM
@@ -30,59 +22,6 @@ async def run_zepto_search(
     
     counts = {"stores": 0, "in_stock": 0, "out_of_stock": 0, "not_carried": 0, "error": 0, "not_serviceable": 0}
     checked_stores = set()
-
-    if os.environ.get("ZEPTO_TEST_MODE", "").strip().lower() == "true":
-        city_stores = cache.stores_for_city("Bengaluru", "zepto")
-        is_bengaluru_location = bool(city_stores) and (
-            min(store.lat for store in city_stores)
-            <= lat
-            <= max(store.lat for store in city_stores)
-            and min(store.lng for store in city_stores)
-            <= lng
-            <= max(store.lng for store in city_stores)
-        )
-        cached_stores = sorted(
-            city_stores
-            if is_bengaluru_location
-            else cache.stores_in_radius(lat, lng, radius_km, "zepto"),
-            key=lambda store: haversine_km(lat, lng, store.lat, store.lng),
-        )
-        home_stores = sorted(
-            cache.stores_in_radius(lat, lng, radius_km, "zepto"),
-            key=lambda store: haversine_km(lat, lng, store.lat, store.lng),
-        )
-        counts["stores"] = len(cached_stores)
-        counts["in_stock"] = len(cached_stores)
-
-        yield {
-            "type": "home_result",
-            "serviceable": bool(home_stores),
-            "city": home_stores[0].city if home_stores else None,
-            "store_name": home_stores[0].name if home_stores else None,
-            "eta_minutes": None,
-            "product": {"status": "in_stock"} if home_stores else None,
-        }
-        for store in cached_stores:
-            yield {
-                "type": "store_result",
-                "store": {
-                    "id": store.id,
-                    "name": store.name,
-                    "city": store.city,
-                    "lat": store.lat,
-                    "lng": store.lng,
-                    "platform": "zepto",
-                },
-                "distance_km": haversine_km(lat, lng, store.lat, store.lng),
-                "status": "in_stock",
-                "price": zepto_test_price(store.lat, store.lng, store.name),
-                "mrp": 129.0,
-                "verified": False,
-            }
-        yield {"type": "discovery_start", "points_to_probe": 0, "cached_stores": len(cached_stores)}
-        yield {"type": "checking", "total_stores": len(cached_stores)}
-        yield {"type": "done", "summary": dict(counts)}
-        return
     
     async def emit(event: dict) -> None:
         pass # Will be overridden by the wrapper or we can just yield directly
@@ -146,8 +85,27 @@ async def run_zepto_search(
                 "product": {"status": home_product.status} if home_product else None,
             }
 
-            # 2. Check Cached Stores in Radius
-            cached_stores = cache.stores_within(lat, lng, radius_km, "zepto")
+            # Include every imported Bengaluru store when the search location
+            # falls inside the citywide store coordinate bounds.
+            city_stores = cache.stores_for_city("Bengaluru", "zepto")
+            is_bengaluru_location = bool(city_stores) and (
+                min(store.lat for store in city_stores)
+                <= lat
+                <= max(store.lat for store in city_stores)
+                and min(store.lng for store in city_stores)
+                <= lng
+                <= max(store.lng for store in city_stores)
+            )
+
+            # 2. Fetch real product data from cached stores.
+            cached_stores = (
+                city_stores
+                if is_bengaluru_location
+                else cache.stores_within(lat, lng, radius_km, "zepto")
+            )
+            cached_stores.sort(
+                key=lambda store: haversine_km(lat, lng, store.lat, store.lng)
+            )
             for c_store in cached_stores:
                 if c_store.id in checked_stores:
                     continue
@@ -182,7 +140,8 @@ async def run_zepto_search(
             # 3. Sweep Undiscovered Grid Points
             undiscovered = [
                 p for p in hex_grid(lat, lng, radius_km, GRID_SPACING_KM)
-                if not cache.has_fresh_probe_near(p[0], p[1], PROBE_COVERAGE_KM, "zepto")
+                if not is_bengaluru_location
+                and not cache.has_fresh_probe_near(p[0], p[1], PROBE_COVERAGE_KM, "zepto")
             ]
             
             yield {

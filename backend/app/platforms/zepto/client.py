@@ -6,6 +6,8 @@ All Zepto-specific knowledge lives here: hosts, headers, cookies, parsing.
 import asyncio
 import json
 import logging
+import random
+from pathlib import Path
 from urllib.parse import quote, unquote
 from playwright.async_api import async_playwright
 
@@ -20,6 +22,25 @@ WEB_BASE = "https://www.zeptonow.com"
 BFF_BASE = "https://bff-gateway.zepto.com"
 CDN_BASE = "https://cdn.zeptonow.com/production"
 SAMPLE_STORE_ID = "0059ff6a-7eb0-477a-a7f5-69256f2c444b"
+PROXY_LIST_PATH = Path(__file__).resolve().parents[4] / "proxies.txt"
+
+
+def select_random_proxy(proxy_file: Path = PROXY_LIST_PATH) -> str | None:
+    """Select one non-empty proxy URL from the repository-level proxy list."""
+    try:
+        proxy_urls = [
+            line.strip()
+            for line in proxy_file.read_text(encoding="utf-8").splitlines()
+            if line.strip()
+        ]
+    except OSError as error:
+        log.error("Unable to read Zepto proxy list at %s: %s", proxy_file, error)
+        return None
+
+    if not proxy_urls:
+        log.warning("Zepto proxy list at %s contains no proxy URLs", proxy_file)
+        return None
+    return random.choice(proxy_urls)
 
 
 class ZeptoError(PlatformError):
@@ -102,35 +123,56 @@ def _parse_product_detail(data: dict, requested_pvid: str) -> ProductResult:
 
 class ZeptoPlaywrightSession:
     """Manages a single Playwright browser context for Zepto sweeps to avoid WAF blocks."""
-    def __init__(self):
+    def __init__(self, proxy: str | None = None):
         self.browser = None
         self.context = None
         self.page = None
         self._p = None
         self._http_client = None
         self._waf_cookies = {}
+        self.proxy = proxy or select_random_proxy()
 
     async def __aenter__(self):
-        self._p = await async_playwright().start()
-        self.browser = await self._p.chromium.launch(headless=True)
-        self.context = await self.browser.new_context(
-            user_agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
-            viewport={"width": 1280, "height": 800}
-        )
-        self.page = await self.context.new_page()
-        # Initial WAF clearance
-        log.info("Solving initial Zepto WAF...")
-        await self.page.goto(f"{WEB_BASE}/", wait_until="networkidle", timeout=30000)
-        await self.page.wait_for_timeout(2000)
-        
-        # Extract WAF cookies for fast HTTP sweep
-        cookies = await self.context.cookies()
-        self._waf_cookies = {
-            c["name"]: c["value"] for c in cookies 
-            if c["name"] not in ["serviceability", "storeId", "user_position", "selectedAddress", "addressId"]
-        }
-        
-        return self
+        try:
+            self._p = await async_playwright().start()
+            if self.proxy:
+                self.browser = await self._p.chromium.launch(
+                    headless=True,
+                    proxy={"server": self.proxy},
+                )
+            else:
+                self.browser = await self._p.chromium.launch(headless=True)
+            self.context = await self.browser.new_context(
+                user_agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
+                viewport={"width": 1280, "height": 800}
+            )
+            self.page = await self.context.new_page()
+            log.info("Starting Zepto browser session (proxy configured: %s)", bool(self.proxy))
+            await self.page.goto(f"{WEB_BASE}/", wait_until="networkidle", timeout=30000)
+            await self.page.wait_for_timeout(2000)
+
+            cookies = await self.context.cookies()
+            self._waf_cookies = {
+                c["name"]: c["value"] for c in cookies
+                if c["name"] not in ["serviceability", "storeId", "user_position", "selectedAddress", "addressId"]
+            }
+            return self
+        except Exception as error:
+            log.exception(
+                "Zepto browser startup or proxy request failed (proxy configured: %s)",
+                bool(self.proxy),
+            )
+            if self.browser:
+                try:
+                    await self.browser.close()
+                except Exception:
+                    log.exception("Failed to close Zepto browser after startup error")
+            if self._p:
+                try:
+                    await self._p.stop()
+                except Exception:
+                    log.exception("Failed to stop Playwright after startup error")
+            raise ZeptoNetworkError("Zepto browser or proxy connection failed") from error
 
     async def __aexit__(self, exc_type, exc, tb):
         if self.browser:
@@ -218,6 +260,7 @@ class ZeptoPlaywrightSession:
             async with httpx.AsyncClient(
                 follow_redirects=True,
                 timeout=10.0,
+                proxy=self.proxy,
                 headers={
                     "Accept": "text/html",
                     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"
@@ -321,8 +364,10 @@ class ZeptoClient(PlatformClient):
 
     async def fetch_availability_playwright(self, lat: float, lng: float, pvid: str) -> dict:
         """Legacy helper for single-location metadata fetches (e.g. resolve_link)."""
+        session = ZeptoPlaywrightSession()
+        selected_proxy = session.proxy
         try:
-            async with ZeptoPlaywrightSession() as session:
+            async with session:
                 res = await session.probe_location(lat, lng)
                 if not res.get("serviceable") or not res.get("store_id"):
                     return {
@@ -364,9 +409,18 @@ class ZeptoClient(PlatformClient):
                     "product": product_result,
                     "error_reason": None
                 }
-        except ZeptoError:
+        except ZeptoError as error:
+            log.warning(
+                "Zepto availability request failed (proxy configured: %s): %s",
+                bool(selected_proxy),
+                error,
+            )
             raise
         except Exception as e:
+            log.exception(
+                "Zepto availability request failed (proxy configured: %s)",
+                bool(selected_proxy),
+            )
             raise ZeptoNetworkError(f"Playwright product fetch failed: {e}") from e
 
     async def resolve_share_link(self, url: str) -> str | None:
