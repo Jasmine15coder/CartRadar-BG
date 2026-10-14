@@ -9,3 +9,9 @@ backend/app/__pycache__
 *.db-shm
 __pycache__/
 *.pyc
+.env
+proxies.txt
+node_modules/
+.venv/
+__pycache__/
+*.db

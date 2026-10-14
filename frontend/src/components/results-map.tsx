@@ -7,7 +7,7 @@ import "leaflet/dist/leaflet.css"
 import { cn } from "@/lib/utils"
 import { useTheme } from "@/components/theme-provider"
 import { STATUS_LABEL, getPlatformFromId } from "@/components/results-list"
-import type { StoreResult } from "@/lib/api"
+import type { BangaloreStore, StoreResult } from "@/lib/api"
 
 
 import { mapConfig, FALLBACK_CONFIG } from "@/config/mapConfig"
@@ -31,11 +31,21 @@ function getColor(status: StoreResult["status"], platform?: string): string {
   return ERROR_COLOR
 }
 
-function FitToRadius({ lat, lng, radiusKm, fitKey }: { lat: number; lng: number; radiusKm: number; fitKey?: number }) {
+function FitToRadius({ lat, lng, radiusKm, fitKey, enabled }: { lat: number; lng: number; radiusKm: number; fitKey?: number; enabled: boolean }) {
   const map = useMap()
   useEffect(() => {
-    map.fitBounds(L.latLng(lat, lng).toBounds(radiusKm * 2000))
-  }, [map, lat, lng, radiusKm, fitKey])
+    if (enabled) map.fitBounds(L.latLng(lat, lng).toBounds(radiusKm * 2000))
+  }, [map, lat, lng, radiusKm, fitKey, enabled])
+  return null
+}
+
+function FitToBangaloreStores({ stores, enabled }: { stores: BangaloreStore[]; enabled: boolean }) {
+  const map = useMap()
+  useEffect(() => {
+    if (!enabled || stores.length === 0) return
+    const bounds = L.latLngBounds(stores.map((store) => [store.lat, store.lng]))
+    map.fitBounds(bounds, { padding: [24, 24] })
+  }, [map, stores, enabled])
   return null
 }
 
@@ -120,12 +130,14 @@ interface ResultsMapProps {
   homeStatus: StoreResult["status"] | null
   homePrice: number | null
   selectedId: string | null
+  bangaloreStores: BangaloreStore[]
+  fitBangaloreBounds: boolean
   searchPincode?: string | null  // kept in interface for API compatibility; not forwarded to store markers
   onSelect: (result: StoreResult) => void
   className?: string
 }
 
-export function ResultsMap({ lat, lng, radiusKm, results, homeStatus, homePrice, selectedId, onSelect, className }: ResultsMapProps) {
+export function ResultsMap({ lat, lng, radiusKm, results, homeStatus, homePrice, selectedId, bangaloreStores, fitBangaloreBounds, onSelect, className }: ResultsMapProps) {
   const { resolvedTheme } = useTheme()
   const isDark = (resolvedTheme ?? "dark") === "dark"
   const [fitKey, setFitKey] = useState(0)
@@ -223,7 +235,17 @@ export function ResultsMap({ lat, lng, radiusKm, results, homeStatus, homePrice,
         errorTileUrl="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
       />
       <MapResizer />
-      <FitToRadius lat={lat} lng={lng} radiusKm={radiusKm} fitKey={fitKey} />
+      <FitToBangaloreStores
+        stores={bangaloreStores}
+        enabled={fitBangaloreBounds && fitKey === 0}
+      />
+      <FitToRadius
+        lat={lat}
+        lng={lng}
+        radiusKm={radiusKm}
+        fitKey={fitKey}
+        enabled={!fitBangaloreBounds || fitKey > 0}
+      />
       <FlyToSelected results={results} selectedId={selectedId} />
       <Circle
         center={[lat, lng]}

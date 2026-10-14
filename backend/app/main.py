@@ -9,9 +9,11 @@ import hmac
 import httpx
 import json
 import logging
+import sqlite3
 from ipaddress import ip_address
 from contextlib import asynccontextmanager
 from dataclasses import asdict
+from pathlib import Path
 from urllib.parse import quote
 
 from fastapi import Depends, FastAPI, HTTPException, Query, Request
@@ -194,6 +196,37 @@ async def ping():
     """Liveness / wake-up endpoint. No auth required. Used by the frontend to
     pre-warm Render from sleep before the user performs a search."""
     return {"ok": True}
+
+
+@app.get("/api/stores")
+async def get_stores():
+    conn = None
+    try:
+        database_path = Path(__file__).resolve().parent.parent / "data" / "mega.db"
+        conn = sqlite3.connect(database_path)
+        conn.row_factory = sqlite3.Row
+        rows = conn.execute("SELECT id, lat, lon, display_name FROM stores").fetchall()
+        return [dict(row) for row in rows]
+    except sqlite3.OperationalError:
+        return []
+    finally:
+        if conn is not None:
+            conn.close()
+
+
+@app.get("/api/stores/bangalore")
+async def get_bangalore_stores():
+    database_path = Path(__file__).resolve().parent.parent / "data" / "mega.db"
+    conn = sqlite3.connect(database_path)
+    try:
+        conn.row_factory = sqlite3.Row
+        rows = conn.execute(
+            "SELECT id, name, lat, lng FROM stores WHERE city = ? ORDER BY name",
+            ("Bengaluru",),
+        ).fetchall()
+        return [dict(row) for row in rows]
+    finally:
+        conn.close()
 
 
 

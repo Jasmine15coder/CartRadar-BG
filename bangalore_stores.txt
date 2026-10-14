@@ -1,0 +1,160 @@
+id	name	lat	lng	city	state
+ae43241e-255b-4c36-8275-c775b91b4028	BLR-RAGHAVENDRA LAYOUT	12.8849293	77.5409494	Bengaluru	Karnataka
+e65fe048-7b72-4698-8aac-03359d3171a3	BLR-Kasturinagar	13.0047881	77.6629972	Bengaluru	Karnataka
+1a2ba310-07de-4a70-946c-b54f2a487646	BLR-Kadugodi	12.98612069	77.7450889	Bengaluru	Karnataka
+0053a04d-aeb4-46b5-99fe-d740491e3843	BLR-Jakkur New	13.06662468	77.6092697	Bengaluru	Karnataka
+5678bc9a-0e9e-4d5e-a78c-4b418df692eb	BLR-Bannerghatta Network 2	12.86837	77.61872	Bengaluru	Karnataka
+cf384ecd-5e1f-47e9-9194-8e9dc940e8c3	BLR-JAYANAGAR New	12.941703	77.580188	Bengaluru	Karnataka
+4e507e91-6be7-4f3c-8dfe-aaa051a6d0c8	BLR-ITPL Layout	12.96191262	77.71678497	Bengaluru	Karnataka
+6047c8fe-15ed-4c61-8d3e-060e800702f5	BLR - Bhadrappa Layout	13.04753258	77.57837343	Bengaluru	Karnataka
+0f2d3f82-cf97-45e8-bd80-759fe5dfbf6c	BLR-Sarjapur-2	12.9026566	77.6613229	Bengaluru	Karnataka
+40382f4d-61eb-4e99-9a0f-201fd9926f40	BLR-BTM-2	12.91177954	77.60319877	Bengaluru	Karnataka
+99949ff5-2335-4704-bbdf-b8f86a90c811	BLR-RWF Yelahanka	13.106778	77.580361	Bengaluru	Karnataka
+34774f44-f41c-4bde-993b-8e93684ff94f	BLR-Pipeline road new	13.04233	77.54778	Bengaluru	Karnataka
+e4a9d9d2-dcea-46bb-b683-83dda1e9e6d6	BLR-Shivaji nagar New	12.989395	77.609946	Bengaluru	Karnataka
+ea49abf1-77df-4575-8022-fbcf9e25b3b4	BLR-JP Nagar New	12.894204	77.584495	Bengaluru	Karnataka
+5ec071fd-78df-41f6-b3ae-7298d9f96a3d	BLR-Teachers colony	12.925095	77.637091	Bengaluru	Karnataka
+631ed664-2717-487d-9979-1e294b7a1b4e	BLR-Choodasandra	12.8821174	77.6733285	Bengaluru	Karnataka
+93891814-819c-4e05-95a9-48ba1696f039	BLR-Hope Farm New	12.98416	77.767	Bengaluru	Karnataka
+917d20a7-58e4-4574-95dd-dfe3513dd1b2	BLR-YESHWANTPUR	13.010808	77.540878	Bengaluru	Karnataka
+43dc610a-b80c-43e1-ac35-2d899d88795d	BLR-GUNJUR	12.9286633	77.7380822	Bengaluru	Karnataka
+2d36aa4d-f410-4fd9-8b9b-cbfd02460e51	BLR-Hennur New	13.03859871	77.64591263	Bengaluru	Karnataka
+7e5a1821-59ed-4d8a-8431-a3705afb22d2	BLR-HSR Layout New	12.91183266	77.64398388	Bengaluru	Karnataka
+dc47f38a-1d35-4144-a6b2-d1470a32faf3	BLR-Sanjaynagar	13.03273924	77.58054019	Bengaluru	Karnataka
+50928523-a4f4-42ad-8c57-e2eedf5f19cd	BLR-Vidyaranyapura	13.0695733	77.5589887	Bengaluru	Karnataka
+a09f04ca-3c1d-4523-8606-386ce213a7ae	BLR-Kambipura	12.8872429	77.45868	Bengaluru	Karnataka
+0a5e41a0-7252-43f6-9e8f-9a1e5d48ddd3	BLR-BASAVANAPURA	13.015649	77.70943	Bengaluru	Karnataka
+e791004e-f7d8-4a2b-9e05-ac0a95bd2706	BLR-Mathikere	13.0265	77.558028	Bengaluru	Karnataka
+d5da3809-1327-4050-b59b-43342ea74482	BLR-Doddakannelli	12.90605	77.697337	Bengaluru	Karnataka
+afc14c75-c874-46d8-9877-e66bfa0c7299	BLR-Kothnur New	12.87009657	77.58372383	Bengaluru	Karnataka
+97acd88b-1a82-499b-acf1-c7e365eab5ce	BLR-Marathahalli 2	12.97467998	77.69700174	Bengaluru	Karnataka
+3a44ca1a-adde-4f8e-9e0c-613a98d348b7	BLR-BROOKEFIELD	12.98497	77.71066	Bengaluru	Karnataka
+e58fff62-7695-44c2-aba0-6bc96074bc64	BLR-Belathur	12.9996667	77.7464722	Bengaluru	Karnataka
+90fc9dad-9c9d-4a35-8cda-ef07da7811ef	BLR-Avalahalli Main	12.946167	77.549333	Bengaluru	Karnataka
+58c5b67d-32d8-494a-8451-a720173b6b8e	BLR-Kogilu Road	13.10307433	77.63013442	Bengaluru	Karnataka
+68c16fa4-b598-4f88-a656-a573186596c7	BLR-Abbigere	13.074063	77.519827	Bengaluru	Karnataka
+75946a5e-942e-4db1-9e7c-5fe2eb85088b	BLR-Brookfield Network	12.99616854	77.69103524	Bengaluru	Karnataka
+2ed5a568-da07-4497-b5c7-29237e478a38	BLR-Margosa road	13.0059977	77.5695793	Bengaluru	Karnataka
+b1403534-cd6b-49d0-a7cd-ce20e6497768	BLR-RICHMOND TOWN	12.96637618	77.60692112	Bengaluru	Karnataka
+2240913f-e14f-46cc-94e8-ff6f5c32ffab	BLR-Neo Town	12.81998463	77.66277018	Bengaluru	Karnataka
+5c85fffa-7130-43f2-9b34-0decc06beddc	BLR-Nagavara	13.038049	77.617309	Bengaluru	Karnataka
+856b33b6-5cfb-4b67-8702-62b49fc5db26	BLR-Sompura	12.86423227	77.77015527	Bengaluru	Karnataka
+300a1056-ad32-430e-b5e4-41624b0494ed	BLR-Chamrajpet	12.960098	77.559489	Bengaluru	Karnataka
+ba537e2f-5d2b-460c-8e18-adedaea3a91f	BLR-CV Raman Nagar Network-2	12.96657501	77.67172065	Bengaluru	Karnataka
+5c0e30fc-969b-4051-a30a-e9e5be4affdd	BLR-Nikoo Home New	13.07977074	77.64375554	Bengaluru	Karnataka
+2fd0f3ca-d788-41bc-be14-a18850bf78cc	BLR-Kasavanahalli	12.899348	77.678337	Bengaluru	Karnataka
+4b085c97-667a-4149-ade7-d61c8a7fa42f	BLR-Kalyan Nagar Network	13.01482	77.62778	Bengaluru	Karnataka
+5f97e876-bbea-4c00-8df2-2005db7db8dc	BLR-Challakere	13.02629	77.64364	Bengaluru	Karnataka
+5a365997-32ca-4016-a42c-7108b5701d65	BLR-Ullal	12.958532	77.479896	Bengaluru	Karnataka
+34404f78-ff38-402a-a367-29b31e477ca3	BLR-Goraguntepalya	13.02475	77.537306	Bengaluru	Karnataka
+92a53fbb-3e34-4c74-9362-faff5a5cf154	BLR-Ramamurthy Nagar Network	13.01813845	77.6597251	Bengaluru	Karnataka
+7de4838b-ae7c-44d0-bf24-fb2040666654	BLR-INDIRANAGAR NEW	12.962298	77.645909	Bengaluru	Karnataka
+3f1d2280-a5ff-48c0-a1fa-470988df7803	BLR-Agrahara Road	12.931722	77.682389	Bengaluru	Karnataka
+5400933d-3c5d-4015-a767-daed27781a0d	BLR- Sonnenahalli New	12.96170119	77.49901482	Bengaluru	Karnataka
+266f0f16-dcf8-4ab0-bbfb-2860b57c3c9b	BLR-BHADRAPPA LAYOUT NETWORK	13.05902074	77.58133229	Bengaluru	Karnataka
+7ecd44a0-e376-4404-ba72-0210469bce81	BLR-Banashankari New	12.938726	77.539149	Bengaluru	Karnataka
+eeea2403-3a6e-49b7-874b-3d8743ef3cd8	BLR-Bannerghatta Network	12.86591329	77.59627361	Bengaluru	Karnataka
+a16e98dd-a208-4aa2-9627-69eef07e8d69	BLR-Malagala	12.97812065	77.51643345	Bengaluru	Karnataka
+416b9549-1413-435d-b08b-1d150131f6cd	BLR-Electronic City Network-2	12.85202043	77.65224877	Bengaluru	Karnataka
+58c8d052-7d22-4240-a853-91638fbc3736	BLR-BEML Layout	12.91703243	77.49891252	Bengaluru	Karnataka
+9a06ad35-7abd-4a32-bb2d-ae5a46fb3620	BLR-Bagalur	13.12263575	77.62344754	Bengaluru	Karnataka
+70587079-1b46-4f4e-85fa-e84acebcd919	BLR-Dooravani Nagar	13.01020348	77.66771313	Bengaluru	Karnataka
+4778fa3d-0494-484a-b488-e2b40088ddd7	BLR-Vijay Nagar Network	12.960476	77.519569	Bengaluru	Karnataka
+c647bfb4-1b5a-433d-ba29-0c75c2da883e	BLR-Kannika Nagar	12.79803706	77.66311187	Bengaluru	Karnataka
+3fdf2ec3-0ac0-4e8d-a7f0-e184ef12fbe6	BLR-SHIVAJI NAGAR Network	13.00264558	77.59946146	Bengaluru	Karnataka
+fccfee31-fe80-4c19-bde6-986f2e01cd84	BLR-RR Nagar Network	12.9031547	77.51191762	Bengaluru	Karnataka
+1ac44aad-7c9b-46ca-9df0-d0908355de55	BLR-Singapura	13.090409	77.53952	Bengaluru	Karnataka
+7000d78e-6700-49e6-94ac-b4caa221a0f1	BLR-Kengeri	12.92355387	77.49306732	Bengaluru	Karnataka
+eac97b88-bf27-4af5-95ed-15d85d8236c8	BLR-Dasarahalli	13.051424	77.607561	Bengaluru	Karnataka
+6f08827d-5bea-4c32-8bea-ba8a34ae7ed9	BLR-Yallapa Garden	12.983662	77.5487921	Bengaluru	Karnataka
+c30df9f0-06c1-4d33-97ff-10ed99190a4d	BLR-Yelahanka Network	13.13749897	77.56327961	Bengaluru	Karnataka
+796c71f3-568e-4d6d-8767-87285ad4f23a	BLR-BTM Layout Network-3	12.92504226	77.61740928	Bengaluru	Karnataka
+c48dd700-4314-4cc1-bffa-e1344e0298dc	BLR-HEBBAL NEW	13.0324086	77.61231342	Bengaluru	Karnataka
+042b55a7-bfcf-46e8-8cc2-56ba2b4dc7cf	BLR-Nagondanahalli	12.97486139	77.7718582	Bengaluru	Karnataka
+f3aab636-1e25-4da4-b9f4-e8a1ccde5b4a	BLR-RAGHAVENDRA LAYOUT NETWORK	12.8845944	77.55881835	Bengaluru	Karnataka
+9eebbbc9-3fb9-45c1-ab71-312606cf9852	BLR-Bellandur-3	12.93828097	77.6954677	Bengaluru	Karnataka
+044a06cd-5792-44a6-be6b-d5747683349b	BLR-Electronic City New	12.83610023	77.66492453	Bengaluru	Karnataka
+17db8f86-ef55-4838-9e08-886596591965	BLR-Sarjapur New	12.90853465	77.67692834	Bengaluru	Karnataka
+d6e7afa1-5e3c-48e4-be20-227555f7984c	BLR-Mico Layout Network	12.87771825	77.64508193	Bengaluru	Karnataka
+3123bc8b-6f8b-4eab-828e-5715162320e5	BLR-Yelahanka new town New	13.101374	77.562338	Bengaluru	Karnataka
+137b1539-52bc-4840-8bfe-4d71dceb8bb6	BLR-Doddathoguru	12.846654	77.644318	Bengaluru	Karnataka
+29b4c8b1-587b-497c-b4d9-bd2177fefb34	BLR-BTM-3	12.89932425	77.60549641	Bengaluru	Karnataka
+6762f1e3-7f70-4aad-b8fe-8cfde4d37730	BLR-Bommasandra	12.8321446	77.69085963	Bengaluru	Karnataka
+87743594-26c0-495e-a18c-3ef545edcc37	BLR-BTM LAYOUT NEW	12.9266331	77.60991496	Bengaluru	Karnataka
+e749e734-9e20-4090-b5c3-a66ed53b5e23	BLR-Bagalakunte	13.06371941	77.50432545	Bengaluru	Karnataka
+6c257905-3f92-469d-971d-3acc8d41156b	BLR-Peenya New	13.04549024	77.50877381	Bengaluru	Karnataka
+4f54ea62-0269-4b93-87cd-ef7ed796c6b1	BLR-Chickpet New	12.95477912	77.57899927	Bengaluru	Karnataka
+3169658f-77f5-47a3-a87d-e9016e7f3ebe	BLR-RAMAMURTHY NAGAR NEW	13.03362107	77.68593737	Bengaluru	Karnataka
+c9d7d275-70b0-4f96-a48f-2a49801fdee8	BLR-Peenya Network	13.04999	77.487646	Bengaluru	Karnataka
+3077baf7-7bd2-41d0-a221-27cf9d1ec392	BLR-TC Palaya	13.022656	77.688133	Bengaluru	Karnataka
+b4dc8d65-ed2e-4142-81b6-373982b13500	BLR-Whitefield New	12.96902	77.75395	Bengaluru	Karnataka
+b8ba1570-2582-4f6d-a467-330ec39ec6da	BLR-JP Nagar Network-2	12.887526	77.586572	Bengaluru	Karnataka
+5e36e56b-2449-4262-b397-f8af3464f5e3	BLR-HSR-3	12.905778	77.637514	Bengaluru	Karnataka
+6ceb23b1-672d-4fd7-a89c-66163925a764	BLR-Silver County	12.89366814	77.66299978	Bengaluru	Karnataka
+6abd3309-1e45-4411-943a-81f5c32fef41	BLR-Singasandra Network	12.86296	77.67777	Bengaluru	Karnataka
+0cde9637-ca43-45b6-a89c-08c1e32bae57	BLR-Marathahalli New	12.95185786	77.7195682	Bengaluru	Karnataka
+a7e2806a-ae58-46e2-87ac-a937360ad74f	BLR-Yelenahalli	12.86077262	77.61333628	Bengaluru	Karnataka
+7c3e8dc3-8781-489c-a2c7-8f8f67149083	BLR-VIJAY NAGAR	12.96845	77.5381	Bengaluru	Karnataka
+5b1796e1-36c2-4ae9-83a0-c03c25cac05a	BLR-Michael Palaya	12.972597	77.637048	Bengaluru	Karnataka
+1fc622b2-7469-494a-818f-61f354d4f110	BLR-Kadarenahalli	12.914745	77.559864	Bengaluru	Karnataka
+6e2378a8-458e-4aff-b783-80685cf86a43	BLR-Aswath Nagar	12.950734	77.697838	Bengaluru	Karnataka
+cd653888-0a9a-4251-8d70-7df4c8c2f22a	BLR-CV RAMAN NAGAR NEW	12.97905901	77.67836866	Bengaluru	Karnataka
+92cd8931-88ef-4042-a452-0e2ecce17676	BLR-Narayana reddy Layout	12.939045	77.62645	Bengaluru	Karnataka
+a1c67132-94e3-41b9-975b-4ef4e4851406	BLR-Magadi Road	12.99005606	77.48523812	Bengaluru	Karnataka
+996c6a91-1fd7-46cc-9ccc-f0960c219aaf	BLR-Devanahalli	13.23884831	77.72347676	Bengaluru	Karnataka
+1ba2b8e0-aa82-4a78-b38b-477b97eac054	BLR-Thyagaraja Nagar	12.930236	77.56869	Bengaluru	Karnataka
+874241a8-e4fc-439e-a816-ee65aceba124	BLR-Silicon Town	12.852472	77.675972	Bengaluru	Karnataka
+ff1fc8e6-9f22-4c75-b7cf-15a5bd19be91	BLR-BANNERGHATTA	12.87747	77.60264	Bengaluru	Karnataka
+f6807d7c-9f71-49c7-9a15-50919b30fccf	BLR-Mico layout New	12.892833	77.628083	Bengaluru	Karnataka
+d23be55e-2fd8-41d4-8926-71db05186604	BLR-Banashankari Network	12.91552164	77.5456912	Bengaluru	Karnataka
+f0ee4637-9124-43be-a8af-025edb341570	BLR-Golahalli	12.864209	77.569285	Bengaluru	Karnataka
+17141f08-6ccd-4d8b-ae18-0bd9ebbb8a40	BLR-KALYAN NAGAR NEW	13.006655	77.641639	Bengaluru	Karnataka
+16755fdd-f32e-40f1-a39b-397bc73f7e5d	BLR-Carmelaram	12.908522	77.71151	Bengaluru	Karnataka
+ff56ec59-36c7-41a0-ab98-1a3390126da5	BLR-Cholayanakanalli	13.02922	77.59377	Bengaluru	Karnataka
+83aac9aa-1afa-4758-a0a4-948e3720d4fc	BLR-Richmond Town Network	12.95642	77.60566	Bengaluru	Karnataka
+5d427762-35fa-45f0-92b2-560b135fcba3	BLR-New Gurappanya Palya	12.905922	77.612674	Bengaluru	Karnataka
+5556e883-5d07-4742-8fd9-215bdcda277b	BLR-JC Nagar	13.0031742	77.5308889	Bengaluru	Karnataka
+779c2c0e-a826-463f-8019-78b46a6e6498	BLR-Nehru Nagar	13.09133919	77.60125138	Bengaluru	Karnataka
+7a00b962-e558-4d95-9d23-98060c62152b	BLR-Hegganahalli	13.007886	77.506191	Bengaluru	Karnataka
+5565a614-f2a6-428f-9396-5237db1828e7	BLR-Sunrise Layout	12.84495985	77.59398467	Bengaluru	Karnataka
+e6ebaf4d-7f47-44bd-bb8f-f7ab1e884191	BLR-Chandapura	12.78979486	77.70420581	Bengaluru	Karnataka
+1d852498-590f-4ffa-babf-aae026e3584d	BLR-Narayanapura Network	13.06274846	77.63500348	Bengaluru	Karnataka
+a3d3505f-b5c5-4ba6-8bec-2ea6533a02de	BLR-Jakkur Network	13.059459	77.622438	Bengaluru	Karnataka
+a1cbdf77-8824-4c12-85b4-3b114318497d	BLR-JP Nagar Network	12.91322648	77.57300634	Bengaluru	Karnataka
+97301572-98d1-4b4d-8e40-d52748fe5233	BLR-Malleshwaram new	12.987709	77.561344	Bengaluru	Karnataka
+391731c1-dd52-4f25-850d-d388f0520713	BLR-Mico layout network-2	12.9036896	77.62857765	Bengaluru	Karnataka
+0f5f31f2-f764-498a-9cc5-606cf82f4f2e	BLR-BELLANDUR - 2	12.91910594	77.69695312	Bengaluru	Karnataka
+ccc9dc9b-9c6f-421e-bedc-f2e7463a75e9	BLR-Kumaraswamy Layout	12.89481283	77.56436304	Bengaluru	Karnataka
+ff1faef1-3d57-48e0-acce-b6fa68b925e1	BLR-Bellandur 6	12.92153068	77.6778849	Bengaluru	Karnataka
+56a84923-c0a2-48e2-8038-22b142c59fff	BLR-Tippenahalli	13.028672	77.494908	Bengaluru	Karnataka
+dbf340e3-54d9-4842-98da-e11d23d7e3ac	BLR-Electronic city network	12.8373766	77.64362247	Bengaluru	Karnataka
+e0e12ce6-3431-4ed8-a74b-b0de26426220	BLR-Kannamangala	13.01745885	77.7593783	Bengaluru	Karnataka
+376dd638-f05e-4171-b4e1-b97650b79fe7	BLR-Marathahalli-3	12.96160746	77.70483424	Bengaluru	Karnataka
+318b567c-b7bf-4997-a79b-27c3055e080a	BLR-Manjunatha layout	12.946874	77.71504	Bengaluru	Karnataka
+94528e28-a7cb-4b41-8127-6a5625f4516f	BLR-Marathahalli-4	12.94915445	77.70329588	Bengaluru	Karnataka
+64ce964a-4464-4cc7-b726-d6befbaa27f9	BLR-Junnasandra	12.90252	77.68669	Bengaluru	Karnataka
+03b26203-507f-4489-b0ff-b34eb42a2215	BLR-Brookfield Network-2	12.9951836	77.7201213	Bengaluru	Karnataka
+bf1b6356-328b-4cfa-840e-0b555dab374f	BLR-27th Main Road	12.92066697	77.64927694	Bengaluru	Karnataka
+97bf23f5-dc0c-4783-ba7d-9d6da842066b	BLR-BASAVANAPURA NETWORK 2	13.03206661	77.70806469	Bengaluru	Karnataka
+5ac90c68-3608-41c5-b3e3-dc59ff0f0a91	BLR-Bellandur new	12.92856098	77.67066436	Bengaluru	Karnataka
+0c02c311-65e5-4495-bcb4-ee96476882bb	BLR-Kudlu	12.8906552	77.6456667	Bengaluru	Karnataka
+21d42ce9-9a73-428f-89ef-75323784c3b8	BLR-HSR-2	12.899316	77.651296	Bengaluru	Karnataka
+320121c9-8af7-4921-9eea-5c456b7a900d	BLR-BELLANDUR-4	12.94884312	77.68669714	Bengaluru	Karnataka
+e044093d-2a02-4fd7-a1e9-5542edbe746a	BLR-GUNJUR Network	12.93949838	77.72908936	Bengaluru	Karnataka
+7ae361e2-d507-4d10-a5c7-e8d14fded59d	BLR-Whitefield Network-2	12.97187036	77.7349202	Bengaluru	Karnataka
+931f6620-df91-45d7-a527-99a29c4db568	BLR-Jayanagar 9th block	12.926377	77.597071	Bengaluru	Karnataka
+1ad29aa7-34e9-4268-9238-5a3a3fcd1bd2	BLR-Sattava East	13.02716623	77.74726407	Bengaluru	Karnataka
+b91d4052-6ea1-4b97-9aba-d6a642735146	BLR-Banjara Layout	13.03608037	77.66570773	Bengaluru	Karnataka
+0921a0f1-6acb-46da-bbf8-c85018e6fdb1	BLR-SINGASANDRA	12.870083	77.659171	Bengaluru	Karnataka
+2fc208e2-13ec-407a-b947-51c8fe777f71	BLR-CV Raman Nagar Network	12.996864	77.673218	Bengaluru	Karnataka
+a9270a93-3b09-47de-a1f0-b24dda248a6f	BLR-Arekere	12.885917	77.6083204	Bengaluru	Karnataka
+5a7da89a-1be1-430e-b00e-8a1c71f66e82	BLR-Narayanapura	13.06382134	77.6492007	Bengaluru	Karnataka
+9fb087cf-076d-40a0-b974-8d26eaa69f44	BLR-Basavanapura Network	13.00442	77.72122	Bengaluru	Karnataka
+9994adc8-71a8-48c9-9892-6f2a3b247ff6	BLR-Seegehalli	13.01943027	77.72412424	Bengaluru	Karnataka
+047c3539-e3a3-4996-bd0b-71182aee7b00	BLR-Bellandur-5	12.929433	77.704772	Bengaluru	Karnataka
+425e2ef0-02bc-4c87-b423-cfbc6e56984a	BLR-Siddapura	12.95761396	77.72956081	Bengaluru	Karnataka
+2a03ca86-cefc-4372-b2e8-eb577889f48c	BLR-HBR Layout	13.03663419	77.62425878	Bengaluru	Karnataka
+cf1fab3e-edc1-4a8a-8054-5abe91c20f69	BLR-TMC Layout	12.91025	77.58977	Bengaluru	Karnataka
+37531a1f-495c-4f67-bd1e-e3a6158fbf10	BLR-Budigere Cross	13.063784	77.741966	Bengaluru	Karnataka
+276795b6-81e7-40f5-9054-efa418de5561	BLR-RAGHAVENDRA LAYOUT NETWORK 2	12.8666929	77.5357013	Bengaluru	Karnataka
+595183e5-c95f-451c-82b4-38f2de65cd09	BLR-Anjanapura	12.86034948	77.54171841	Bengaluru	Karnataka

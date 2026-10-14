@@ -25,8 +25,7 @@ SAMPLE_STORE_ID = "0059ff6a-7eb0-477a-a7f5-69256f2c444b"
 PROXY_LIST_PATH = Path(__file__).resolve().parents[4] / "proxies.txt"
 
 
-def select_random_proxy(proxy_file: Path = PROXY_LIST_PATH) -> str | None:
-    """Select one non-empty proxy URL from the repository-level proxy list."""
+def _read_proxy_urls(proxy_file: Path = PROXY_LIST_PATH) -> list[str]:
     try:
         proxy_urls = [
             line.strip()
@@ -35,12 +34,17 @@ def select_random_proxy(proxy_file: Path = PROXY_LIST_PATH) -> str | None:
         ]
     except OSError as error:
         log.error("Unable to read Zepto proxy list at %s: %s", proxy_file, error)
-        return None
+        return []
 
     if not proxy_urls:
         log.warning("Zepto proxy list at %s contains no proxy URLs", proxy_file)
-        return None
-    return random.choice(proxy_urls)
+    return proxy_urls
+
+
+def select_random_proxy(proxy_file: Path = PROXY_LIST_PATH) -> str | None:
+    """Select one non-empty proxy URL from the repository-level proxy list."""
+    proxy_urls = _read_proxy_urls(proxy_file)
+    return random.choice(proxy_urls) if proxy_urls else None
 
 
 class ZeptoError(PlatformError):
@@ -130,7 +134,8 @@ class ZeptoPlaywrightSession:
         self._p = None
         self._http_client = None
         self._waf_cookies = {}
-        self.proxy = proxy or select_random_proxy()
+        proxy_urls = _read_proxy_urls(PROXY_LIST_PATH)
+        self.proxy = proxy or (random.choice(proxy_urls) if proxy_urls else None)
 
     async def __aenter__(self):
         try:

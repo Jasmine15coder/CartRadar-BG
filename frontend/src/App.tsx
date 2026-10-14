@@ -101,14 +101,17 @@ import { useGeocode } from "@/hooks/use-geocode"
 import { useSearch } from "@/hooks/use-search"
 import {
   detectPlatformFromUrl,
+  getBangaloreStores,
   getConfig,
   getServiceability,
   getToken,
+  haversineDistanceKm,
   pingBackend,
   PLATFORM_LABELS,
   resolveLink,
   setToken,
   type AppConfig,
+  type BangaloreStore,
   type GeocodeResponse,
   type PlatformServiceability,
   type ResolveResponse,
@@ -309,6 +312,7 @@ export function App() {
   const [coords, setCoordsState] = useState<GeocodeResponse | null>(() =>
     load("mf.coords")
   )
+  const [bangaloreStores, setBangaloreStores] = useState<BangaloreStore[]>([])
   const [radiusKm, setRadiusState] = useState<number>(
     () => load("mf.radius") ?? 5
   )
@@ -320,6 +324,57 @@ export function App() {
   const [lastRunKey, setLastRunKey] = useState<string | null>(null)
 
   const [serviceability, setServiceability] = useState<Record<string, PlatformServiceability> | null>(null)
+
+  useEffect(() => {
+    let active = true
+    getBangaloreStores()
+      .then((stores) => {
+        if (active) setBangaloreStores(stores)
+      })
+      .catch((error: unknown) => {
+        console.error("Failed to load Bangalore dark stores", error)
+        if (active) toast.error("Couldn't load Bangalore dark-store locations.")
+      })
+    return () => {
+      active = false
+    }
+  }, [])
+
+  const bangaloreBounds = useMemo(() => {
+    if (bangaloreStores.length === 0) return null
+    return bangaloreStores.reduce(
+      (bounds, store) => ({
+        minLat: Math.min(bounds.minLat, store.lat),
+        maxLat: Math.max(bounds.maxLat, store.lat),
+        minLng: Math.min(bounds.minLng, store.lng),
+        maxLng: Math.max(bounds.maxLng, store.lng),
+      }),
+      {
+        minLat: bangaloreStores[0].lat,
+        maxLat: bangaloreStores[0].lat,
+        minLng: bangaloreStores[0].lng,
+        maxLng: bangaloreStores[0].lng,
+      }
+    )
+  }, [bangaloreStores])
+
+  const nearestBangaloreStore = useMemo(() => {
+    if (!coords || !bangaloreBounds) return null
+    const insideBangaloreBounds =
+      coords.lat >= bangaloreBounds.minLat &&
+      coords.lat <= bangaloreBounds.maxLat &&
+      coords.lng >= bangaloreBounds.minLng &&
+      coords.lng <= bangaloreBounds.maxLng
+    if (!insideBangaloreBounds) return null
+
+    return bangaloreStores.reduce<{ store: BangaloreStore; distance: number } | null>(
+      (nearest, store) => {
+        const distance = haversineDistanceKm(coords, store)
+        return !nearest || distance < nearest.distance ? { store, distance } : nearest
+      },
+      null
+    )
+  }, [bangaloreBounds, bangaloreStores, coords])
 
   // Fetch real-time serviceability whenever coordinates change
   useEffect(() => {
@@ -986,7 +1041,11 @@ export function App() {
                 </CardHeader>
                 <CardContent>
                   <FieldGroup>
-                    <LocationSearch coords={coords} onCoords={setCoords} />
+                    <LocationSearch
+                      coords={coords}
+                      onCoords={setCoords}
+                      nearestStoreName={nearestBangaloreStore?.store.name}
+                    />
                     <Field>
                       <div className="flex items-center justify-between">
                         <FieldLabel htmlFor="radius">Search radius</FieldLabel>
@@ -1262,6 +1321,8 @@ export function App() {
                         homeStatus={state.home?.product?.status ?? null}
                         homePrice={homePrice}
                         selectedId={selectedId}
+                        bangaloreStores={bangaloreStores}
+                        fitBangaloreBounds={!!nearestBangaloreStore}
                         searchPincode={searchPincode}
                         onSelect={handleSelect}
                         className="w-full h-full absolute inset-0"

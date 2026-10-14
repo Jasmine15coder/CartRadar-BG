@@ -1,5 +1,7 @@
 import asyncio
 
+import pytest
+
 from app.platforms.base import ProductResult
 from app.platforms.zepto import search as zepto_search
 from app.platforms.zepto import client as zepto_client
@@ -78,7 +80,11 @@ def test_select_random_proxy_strips_whitespace_and_ignores_empty_entries(tmp_pat
     assert select_random_proxy(proxy_file) == "http://proxy-two:8080"
 
 
-def test_playwright_launch_uses_selected_proxy(monkeypatch) -> None:
+def test_playwright_launch_uses_selected_proxy(monkeypatch, tmp_path) -> None:
+    proxy_file = tmp_path / "proxies.txt"
+    proxy_file.write_text("http://approved-proxy:8080\n", encoding="utf-8")
+    monkeypatch.setattr(zepto_client, "PROXY_LIST_PATH", proxy_file)
+    monkeypatch.delenv("ZEPTO_TEST_MODE", raising=False)
     launch_options: dict = {}
 
     class FakePage:
@@ -132,7 +138,11 @@ def test_playwright_launch_uses_selected_proxy(monkeypatch) -> None:
     }
 
 
-def test_proxy_launch_failure_is_wrapped_and_playwright_stopped(monkeypatch) -> None:
+def test_proxy_launch_failure_is_wrapped_and_playwright_stopped(monkeypatch, tmp_path) -> None:
+    proxy_file = tmp_path / "proxies.txt"
+    proxy_file.write_text("http://approved-proxy:8080\n", encoding="utf-8")
+    monkeypatch.setattr(zepto_client, "PROXY_LIST_PATH", proxy_file)
+    monkeypatch.delenv("ZEPTO_TEST_MODE", raising=False)
     stopped = False
 
     class FakeChromium:
@@ -163,3 +173,65 @@ def test_proxy_launch_failure_is_wrapped_and_playwright_stopped(monkeypatch) -> 
         raise AssertionError("A failed proxy launch must be reported.")
 
     assert stopped
+
+
+@pytest.mark.parametrize("proxy_contents", [None, " \n\t"])
+@pytest.mark.parametrize("test_mode", [False, True])
+def test_missing_proxy_or_test_mode_still_starts_live_playwright(
+    tmp_path, monkeypatch, proxy_contents: str | None, test_mode: bool
+) -> None:
+    proxy_file = tmp_path / "proxies.txt"
+    if proxy_contents is not None:
+        proxy_file.write_text(proxy_contents, encoding="utf-8")
+    monkeypatch.setattr(zepto_client, "PROXY_LIST_PATH", proxy_file)
+    if test_mode:
+        monkeypatch.setenv("ZEPTO_TEST_MODE", "true")
+    else:
+        monkeypatch.delenv("ZEPTO_TEST_MODE", raising=False)
+    launch_options: dict = {}
+
+    class FakePage:
+        async def goto(self, *args, **kwargs):
+            return None
+
+        async def wait_for_timeout(self, *args):
+            return None
+
+    class FakeContext:
+        async def new_page(self):
+            return FakePage()
+
+        async def cookies(self):
+            return []
+
+    class FakeBrowser:
+        async def new_context(self, **kwargs):
+            return FakeContext()
+
+        async def close(self):
+            return None
+
+    class FakeChromium:
+        async def launch(self, **kwargs):
+            launch_options.update(kwargs)
+            return FakeBrowser()
+
+    class FakePlaywright:
+        chromium = FakeChromium()
+
+        async def stop(self):
+            return None
+
+    class FakeManager:
+        async def start(self):
+            return FakePlaywright()
+
+    monkeypatch.setattr(zepto_client, "async_playwright", lambda: FakeManager())
+
+    async def open_session() -> None:
+        async with ZeptoPlaywrightSession() as session:
+            assert session.page is not None
+
+    asyncio.run(open_session())
+
+    assert launch_options == {"headless": True}

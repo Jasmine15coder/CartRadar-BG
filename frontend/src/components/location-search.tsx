@@ -17,12 +17,13 @@ import { placeDetails, suggestPlaces, type GeocodeResponse, type PlaceSuggestion
 interface LocationSearchProps {
   coords: GeocodeResponse | null
   onCoords: (coords: GeocodeResponse | null) => void
+  nearestStoreName?: string | null
   placeholder?: string
 }
 
 const STORAGE_KEY = "cartRadar_lastLocation"
 
-export function LocationSearch({ coords, onCoords, placeholder }: LocationSearchProps) {
+export function LocationSearch({ coords, onCoords, nearestStoreName, placeholder }: LocationSearchProps) {
   const [query, setQuery] = useState(coords?.label ?? "")
   const [suggestions, setSuggestions] = useState<PlaceSuggestion[]>([])
   const [open, setOpen] = useState(false)
@@ -229,6 +230,11 @@ export function LocationSearch({ coords, onCoords, placeholder }: LocationSearch
         <FieldDescription>Searching around: {coords.label}</FieldDescription>
       ) : (
         <FieldDescription>Pick a suggestion or tap the GPS button.</FieldDescription>
+      )}
+      {nearestStoreName && (
+        <FieldDescription>
+          Nearest Bangalore dark store: {nearestStoreName}
+        </FieldDescription>
       )}
 
       {!coords && savedLocation && !query && (

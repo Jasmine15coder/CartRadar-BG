@@ -31,6 +31,43 @@ export interface GeocodeResponse {
   label: string
 }
 
+export interface BangaloreStore {
+  id: string
+  name: string
+  lat: number
+  lng: number
+}
+
+export function getBangaloreStores() {
+  return request<BangaloreStore[]>("/api/stores/bangalore")
+}
+
+export function haversineDistanceKm(
+  from: { lat: number; lng: number },
+  to: { lat: number; lng: number }
+): number {
+  const radians = (degrees: number) => (degrees * Math.PI) / 180
+  const latitudeDelta = radians(to.lat - from.lat)
+  const longitudeDelta = radians(to.lng - from.lng)
+  const fromLatitude = radians(from.lat)
+  const toLatitude = radians(to.lat)
+  const haversine =
+    Math.sin(latitudeDelta / 2) ** 2 +
+    Math.cos(fromLatitude) *
+      Math.cos(toLatitude) *
+      Math.sin(longitudeDelta / 2) ** 2
+  const boundedHaversine = Math.min(1, Math.max(0, haversine))
+
+  return (
+    6371.0088 *
+    2 *
+    Math.atan2(
+      Math.sqrt(boundedHaversine),
+      Math.sqrt(1 - boundedHaversine)
+    )
+  )
+}
+
 export interface PlaceSuggestion {
   place_id: string
   description: string
